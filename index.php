@@ -1,8 +1,8 @@
 <?php
 
-const DEFAULT_COLOR_LENGTH = 3;
-const DEFAULT_BASE_CONVERT = 16;
-const DEFAULT_SQUARE = false;
+define('DEFAULT_COLOR_LENGTH', 3);
+define('DEFAULT_BASE_CONVERT', 16);
+define('DEFAULT_SQUARE', false);
 
 $name = getGet('n', '');
 $colorLength = getGet('cl', DEFAULT_COLOR_LENGTH);
@@ -24,7 +24,7 @@ echo implode("\n", $divs);
  * @param mixed|null $default
  * @return mixed
  */
-function getGet(string $key, $default = null)
+function getGet($key, $default = null)
 {
     return isset($_GET[ $key ]) ? $_GET[ $key ] : $default;
 }
@@ -34,7 +34,7 @@ function getGet(string $key, $default = null)
  * @param bool $square
  * @return int
  */
-function getNameProduct(string $name, bool $square): int
+function getNameProduct($name, $square)
 {
     $length = strlen($name);
     $total = null;
@@ -43,7 +43,7 @@ function getNameProduct(string $name, bool $square): int
         $letter = $name[ $i ];
         $letterNumber = ord($letter);
         $letterNumber *= ($square ? $letterNumber : 1);
-        $total = $letterNumber * ($total ?? 1);
+        $total = $letterNumber * ($total ? $total : 1);
     }
 
     return $total;
@@ -55,7 +55,7 @@ function getNameProduct(string $name, bool $square): int
  * @param int $colorLength
  * @return string
  */
-function hexify(int $total, int $baseConvert, int $colorLength): string
+function hexify($total, $baseConvert, $colorLength)
 {
     $hex = base_convert($total, 10, $baseConvert);
     $hexLength = strlen($hex);
@@ -69,7 +69,7 @@ function hexify(int $total, int $baseConvert, int $colorLength): string
  * @param int $colorLength
  * @return array
  */
-function makeColors(string $hex, int $colorLength): array
+function makeColors($hex, $colorLength)
 {
     $colors = str_split($hex, $colorLength);
     return $colors;
@@ -79,11 +79,11 @@ function makeColors(string $hex, int $colorLength): array
  * @param array $colors
  * @return array
  */
-function makeDivs(array $colors): array
+function makeDivs($colors)
 {
     $colorCount = count($colors);
     $widthPercent = (1 / $colorCount) * 100;
-    $divs = [];
+    $divs = array();
 
     foreach ($colors as $color) {
         $divs[] = makeDiv($color, $widthPercent);
@@ -97,7 +97,7 @@ function makeDivs(array $colors): array
  * @param float $widthPercent
  * @return string
  */
-function makeDiv(string $color, float $widthPercent): string
+function makeDiv($color, $widthPercent)
 {
     return "<div style=\"background-color: #{$color}; width: {$widthPercent}%; height: 100%; float: left; /*margin-right: 3px;*/\"></div>";
 }
